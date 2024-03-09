@@ -10,14 +10,14 @@ PROMPT_DOCUMENT = """Try to extract the following information (if available) fro
 Here the text: 
 {document}
 
-Return the results a JSON in the following format
+Return the results a JSON in the following format.
 {
     "first_name": "string",
     "last_name": "string",
     "date_of_birth": "YYYY-MM-DD",
     "expiry_date": "YYYY-MM-DD",
     "document_id": "string",
-    "country": "string"
-    "gender": "string"
+    "country": "string",
+    "gender": "F or M"
 }"""
                   
