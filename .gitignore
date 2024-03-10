@@ -2,3 +2,7 @@
 *.DS_Store
 *jpg
 *.cpython-311.pyc
+*.html
+*.json
+*.csv
+samples/booking_reservations/*.xls
