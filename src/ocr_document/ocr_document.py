@@ -6,7 +6,9 @@ import cv2
 from constants import PROMPT_DOCUMENT
 from openai import OpenAI
 import numpy as np
+import os
 from transformers import pipeline
+
 
 pipe = pipeline("object-detection", model="hustvl/yolos-tiny")
 client = OpenAI(base_url="http://localhost:1234/v1", api_key="not-needed")
@@ -37,8 +39,6 @@ def process_image(image: Image, res_yolo: dict | None = None):
         image = _remove_faces(image, pipe(image)).convert("L")
     image = np.array(image)
 
-
-    # # Apply thresholding to enhance text
     _, thresholded_image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
     return thresholded_image
 
@@ -48,7 +48,6 @@ def image_to_text(image: Image, res_yolo: dict | None = None) :
     return text
 
 def clean_text(text):
-    #Remove newlines and extra whitespaces
     cleaned_text = re.sub(r'\s+', ' ', text.strip())
     return cleaned_text
 
@@ -78,32 +77,99 @@ def get_num_documents(res_yolo: dict) -> int:
     return len(bbox_documents)
 
 
-#create a cli with argparser
-if __name__ == '__main__':
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--path', type=str, default='samples/documents/document3.jpg', help='Path to the image')
-    args = parser.parse_args()
+# #create a cli with argparser
+# if __name__ == '__main__':
+#     import argparse
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument('--path', type=str, default='samples/documents/document3.jpg', help='Path to the image')
+#     args = parser.parse_args()
 
-    image = Image.open(args.path)
-    res_yolo = pipe(image)
-    texts: list = []
-    if get_num_documents(res_yolo) > 1:
-        for res in res_yolo:
-            if res["label"] == "book":
-                xmin, ymin, xmax, ymax = res["box"].values()
-                image = image.crop((xmin, ymin, xmax, ymax))
-                t = image_to_text(image, res_yolo)
-                texts.append(t)
-    else:
-        texts.append(image_to_text(image))
+#     image = Image.open(args.path)
+#     res_yolo = pipe(image)
+#     texts: list = []
+#     if get_num_documents(res_yolo) > 1:
+#         for res in res_yolo:
+#             if res["label"] == "book":
+#                 xmin, ymin, xmax, ymax = res["box"].values()
+#                 image = image.crop((xmin, ymin, xmax, ymax))
+#                 t = image_to_text(image, res_yolo)
+#                 texts.append(t)
+#     else:
+#         texts.append(image_to_text(image))
  
 
         
-    text = "\n".join(texts)
-    input_text = PROMPT_DOCUMENT.replace("{document}",clean_text(text))
+#     text = "\n".join(texts)
+#     input_text = PROMPT_DOCUMENT.replace("{document}",clean_text(text))
 
-    result = get_result_llm(input_text)
-    print(result)
+#     result = get_result_llm(input_text)
+#     print(result)
     
     
+# given a folder with a set of documents, process one by one and generate an HTML with on the left side the image and on the right side the json file
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--folder', type=str, default='samples/documents/', help='Path to the folder containing document images')
+    args = parser.parse_args()
+
+    # Create a list to store image paths
+    image_paths = [os.path.join(args.folder, file) for file in os.listdir(args.folder) if file.lower().endswith(('.jpg', '.jpeg', '.png'))]
+
+    # Initialize a list to store results
+    results = []
+
+    for image_path in image_paths:
+        image = Image.open(image_path)
+        res_yolo = pipe(image)
+        texts = []
+
+        if get_num_documents(res_yolo) > 1:
+            for res in res_yolo:
+                if res["label"] == "book":
+                    xmin, ymin, xmax, ymax = res["box"].values()
+                    cropped_image = image.crop((xmin, ymin, xmax, ymax))
+                    t = image_to_text(cropped_image, res_yolo)
+                    input_text = PROMPT_DOCUMENT.replace("{document}",clean_text(t))
+                    result = get_result_llm(input_text)
+                    texts.append(result)
+                    
+        else:
+            input_text = PROMPT_DOCUMENT.replace("{document}",clean_text(image_to_text(image)))
+            result = get_result_llm(input_text)
+            texts.append(result)
+
+
+        results.append({
+                            'image_path': image_path,
+                            'texts': texts
+                        })
+
+
+    # Generate HTML file
+    html_content = "<html><body>"
+
+    for result in results:
+        html_content += f"<div style='display:flex;'><img src='{result['image_path']}' style='width:50%;'>"
+        html_content += "<div style='width:50%; padding:10px;'>"
+        for text in result['texts']:
+        
+            html_content += "<pre>"
+            html_content += json.dumps(text, indent=4)
+            html_content += "</pre>"
+
+            html_content += "</div></div>"
+
+    html_content += "</body></html>"
+
+    # Save HTML file
+    html_file_path = 'output.html'
+    with open(html_file_path, 'w') as html_file:
+        html_file.write(html_content)
+
+    print(f"HTML file generated: {html_file_path}")
+    
+    #save list JSON of the results
+    with open('output.json', 'w') as outfile:
+        json.dump([res['texts'] for res in results if res['texts']], outfile)

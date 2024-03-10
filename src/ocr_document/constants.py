@@ -4,8 +4,10 @@ PROMPT_DOCUMENT = """Try to extract the following information (if available) fro
 3.Date of Birth 
 4.Expiry Date 
 5.Document ID
-6.Country
-7.Gender 
+6.Document type (Passport or identity card)
+7.Country (Translate it into italian)
+8.Nationality (Translate it into italian)
+9.Gender 
 
 Here the text: 
 {document}
@@ -17,7 +19,10 @@ Return the results a JSON in the following format.
     "date_of_birth": "YYYY-MM-DD",
     "expiry_date": "YYYY-MM-DD",
     "document_id": "string",
-    "country": "string",
+    "document_type": "string",
+    "country": "string "
+    "nationality": "string",
     "gender": "F or M"
-}"""
+}
+"""
                   
