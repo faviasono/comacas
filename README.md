@@ -1,7 +1,8 @@
 
 # OCR Document and Booking Reservation Management
 
-This repository contains utilities for OCR (Optical Character Recognition) document processing and booking reservation management.
+This repository contains utilities to extract Demographic information from Passport or IDs using OCR and LLM.
+Also, it provides some functionalities to create .txt files to upload to Allogiati-Web & Paytourist to register guests in owned B&Bs.
 
 ## Installation
 
