@@ -1,5 +1,3 @@
-# take a directory as path and read all the .txt files and append the rows to a final .txt file
-
 import os
 import glob
 from tqdm import tqdm
@@ -21,7 +19,6 @@ def merge_txt_files(path: str, output_path: str | None = 'output_merged.txt'):
     txt_files = glob.glob(os.path.join(path, "*.txt"))
 
     rows: list[str] = []
-    # Iterate over the .txt files and append the rows to the merged_file.
     for txt_file in tqdm(txt_files):
         with open(txt_file, "r") as file:
             rows.extend(file.readlines())
@@ -33,10 +30,8 @@ def merge_txt_files(path: str, output_path: str | None = 'output_merged.txt'):
 
 
 if __name__ == "__main__":
-    # create a cli for the function above
     import argparse
 
-    # create argparse and use default values
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--path",
