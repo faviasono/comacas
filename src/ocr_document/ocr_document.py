@@ -121,7 +121,6 @@ def _get_num_documents(res_yolo: dict) -> int:
     return len(bbox_documents)
 
 
-
 def to_json(results: list, output_path: str = 'output.json'):
     """ Save the results to a json file"""
     _LOGGER.info("Saving results to json")
