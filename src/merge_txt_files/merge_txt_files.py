@@ -5,12 +5,13 @@ import glob
 from tqdm import tqdm
 
 
-def merge_txt_files(path):
+def merge_txt_files(path: str, output_path: str | None = 'output_merged.txt'):
     """
     Merge all the .txt files in a directory into a single .txt file.
 
     Args:
         path (str): The path to the directory containing the .txt files.
+        output_path (str): The path where to save the merged .txt file
 
     Returns:
         str: The path to the merged .txt file.
@@ -19,18 +20,16 @@ def merge_txt_files(path):
     # Get all the .txt files in the directory.
     txt_files = glob.glob(os.path.join(path, "*.txt"))
 
-    #
     rows: list[str] = []
     # Iterate over the .txt files and append the rows to the merged_file.
     for txt_file in tqdm(txt_files):
         with open(txt_file, "r") as file:
             rows.extend(file.readlines())
 
-    with open(os.path.join(path, "merged.txt"), "w") as merged_file:
+    with open(os.path.join(path, output_path), "w") as merged_file:
         merged_file.writelines(rows)
 
-    # Return the path to the merged .txt file.
-    return os.path.join(path, "merged.txt")
+    return os.path.join(path, output_path)
 
 
 if __name__ == "__main__":
