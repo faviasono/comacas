@@ -1,4 +1,3 @@
-*.txt
 *.DS_Store
 *jpg
 *.cpython-311.pyc
@@ -7,3 +6,4 @@
 *.csv
 samples/booking_reservations/*.xls
 src/data/booking/*.xls
+samples/merge_txt_files/*.txt
