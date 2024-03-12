@@ -6,3 +6,4 @@
 *.json
 *.csv
 samples/booking_reservations/*.xls
+src/data/booking/*.xls
