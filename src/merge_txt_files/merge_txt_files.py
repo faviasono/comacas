@@ -3,7 +3,7 @@ import glob
 from tqdm import tqdm
 
 
-def merge_txt_files(path: str, output_path: str | None = 'output_merged.txt'):
+def merge_txt_files(*, path: str, output_path: str | None = "output_merged.txt"):
     """
     Merge all the .txt files in a directory into a single .txt file.
 
