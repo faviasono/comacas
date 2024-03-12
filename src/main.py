@@ -9,8 +9,15 @@ import typer
 
 app = typer.Typer()
 
+
 @app.command()
-def id2json(*, file_path: Optional[str] = None ,output_path: Optional[str] = None, path_folder: Optional[str] = None, save_html: bool = False):
+def id2json(
+    *,
+    file_path: Optional[str] = None,
+    output_path: Optional[str] = None,
+    path_folder: Optional[str] = None,
+    save_html: bool = False,
+):
     """
     Convert an image to json or html using OCR + Mistral LLM for RAG Extraction
     """
@@ -20,16 +27,23 @@ def id2json(*, file_path: Optional[str] = None ,output_path: Optional[str] = Non
         raise typer.BadParameter(f"File {file_path} does not exist")
     if path_folder and not os.path.isdir(path_folder):
         raise typer.BadParameter(f"{path_folder} is not a directory")
-    
+
     if file_path:
         results = process_single_image(file_path)
     if path_folder:
         results = process_folder_images(path_folder)
 
     if save_html:
-        to_html(results, output_path if output_path else 'output.html')
+        to_html(
+            results,
+            output_path if output_path else "output.html",
+        )
     else:
-        to_json(results, output_path if output_path else 'output.json')
+        to_json(
+            results,
+            output_path if output_path else "output.json",
+        )
+
 
 if __name__ == "__main__":
     app()
