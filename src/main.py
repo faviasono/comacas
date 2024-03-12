@@ -33,16 +33,25 @@ def id2json(
     if path_folder:
         results = process_folder_images(path_folder)
 
+    out_file: str = output_path if output_path else "output.html" if save_html else "output.json"
     if save_html:
         to_html(
             results,
-            output_path if output_path else "output.html",
+            out_file,
         )
     else:
         to_json(
             results,
-            output_path if output_path else "output.json",
+            out_file,
         )
+    
+    typer.echo(f"Output file saved at {out_file}")
+
+
+@app.command()
+def merge_txts(*, folder_path: str):
+    pass
+
 
 
 if __name__ == "__main__":
