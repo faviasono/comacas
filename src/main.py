@@ -69,7 +69,7 @@ def json2txt(
     property: Optional[int] = 2,
     reservation_file: Optional[str] = None,
 ):
-    """ Transform a json-document to txt ready to upload using .xls reservation Booking data"""
+    """Transform a json-document to txt ready to upload using .xls reservation Booking data"""
     if not os.path.exists(json_file):
         raise typer.BadParameter("Please provide a valid json file")
     if reservation_file and os.path.exists(reservation_file):

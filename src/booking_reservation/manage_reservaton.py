@@ -4,7 +4,7 @@ import datetime as dt
 import os
 
 
-STATE_DF_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'data/alloggiati/stati.csv')
+STATE_DF_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data/alloggiati/stati.csv")
 STATE_DF = pd.read_csv(STATE_DF_PATH)
 
 

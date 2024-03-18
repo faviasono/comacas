@@ -12,7 +12,7 @@ import pytesseract
 import re
 
 HFLogging.set_verbosity(HFLogging.ERROR)
-_LOGGER: logging.Logger= logging.getLogger(__name__)
+_LOGGER: logging.Logger = logging.getLogger(__name__)
 URL_LLM_MODEL: str = "http://localhost:1234/v1"
 
 pipe = pipeline("object-detection", model="hustvl/yolos-tiny")
