@@ -12,11 +12,11 @@ import pytesseract
 import re
 
 HFLogging.set_verbosity(HFLogging.ERROR)
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: logging.Logger= logging.getLogger(__name__)
+URL_LLM_MODEL: str = "http://localhost:1234/v1"
 
 pipe = pipeline("object-detection", model="hustvl/yolos-tiny")
-# TODO: modify with HF pipeline
-client = OpenAI(base_url="http://localhost:1234/v1", api_key="not-needed")
+llm_api = OpenAI(base_url=URL_LLM_MODEL, api_key="not-needed")
 
 
 def process_single_image(*, image_path: str):
@@ -63,7 +63,7 @@ def get_result_llm(prompt: str):
         except json.JSONDecodeError:
             return text
 
-    completion = client.chat.completions.create(
+    completion = llm_api.chat.completions.create(
         model="not-used",
         messages=[
             {
