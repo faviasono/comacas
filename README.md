@@ -6,11 +6,19 @@ Also, it provides some functionalities to create .txt files to upload to Allogia
 
 ## Installation
 
+#### Python Dependencies
+
 To use the functionalities provided in this repository, you need to install the required dependencies. You can do this by running:
 
 ```
 pip install -r requirements.txt
 ```
+
+### LM Studio
+
+The LLM used in this case [Mistral-7B-Instruct-v0.1-GGUF](https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-GGUF) is loaded in [LM Studio](https://lmstudio.ai) and then the server is started locally.
+
+
 
 ## OCR Document
 
