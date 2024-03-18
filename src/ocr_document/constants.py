@@ -10,7 +10,9 @@ PROMPT_DOCUMENT = """Try to extract the following information (if available) fro
 9.Gender 
 
 Here the text: 
+##############
 {document}
+##############
 
 Return the results a JSON in the following format.
 {
